@@ -1,12 +1,13 @@
 import { auth } from "@/auth"
 
 const SettingPage = async () => {
-    const sesson = await auth();
-  return (
-    <div>
-        {JSON.stringify(sesson)}
-    </div>
-  )
+    const session = await auth();
+
+    return (
+      <div>
+          {JSON.stringify(session)}
+      </div>
+    )
 }
 
 export default SettingPage
