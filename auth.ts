@@ -13,7 +13,10 @@ export const {
   signOut
 } = NextAuth({
   callbacks: {
-    async signIn({ user }) {
+    async signIn({ user, account }) {
+
+      if (account?.provider !== "credentials") return true; // ! BY PROVIDER
+
       const existingUser = await getUserById(user.id);
 
       if (!existingUser || !existingUser.emailVerified) {
@@ -22,7 +25,7 @@ export const {
 
       return true;
     },
-    async session({ session, token }) {
+    async session({ token, session }) {
       if (token.sub && session.user) {
         session.user.id = token.sub;
       }
@@ -33,7 +36,7 @@ export const {
 
       return session
     },
-    async jwt({ token, user, profile }) {
+    async jwt({ token }) {
       if (!token.sub) return token;
 
       const existingUser = await getUserById(token.sub);
@@ -41,7 +44,6 @@ export const {
       if (!existingUser) return token;
 
       token.role = existingUser.role;
-
       return token;
     }
   },
